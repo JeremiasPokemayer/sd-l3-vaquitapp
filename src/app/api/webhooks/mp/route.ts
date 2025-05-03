@@ -10,8 +10,6 @@ export async function POST(request: Request, { params }) {
     if (mpPayment.status === "approved") {
       console.log(`Payment ${mpPayment.id} approved`);
       const purchaseId = mpPayment.external_reference;
-
-      await confirmPurchase(purchaseId);
     }
   }
 

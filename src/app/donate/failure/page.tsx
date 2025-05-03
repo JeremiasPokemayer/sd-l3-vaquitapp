@@ -1,18 +1,17 @@
 import styles from "./page.module.scss";
 import Link from "next/link";
-import { confirmPurchase } from "@/lib/purchases";
 
-export default async function Home() {
-  confirmPurchase();
+export default async function Failure() {
   return (
     <div className={styles.root}>
       <div className={styles.content}>
-        <h1 className={styles.title}>¡¡¡Gracias!!!</h1>
+        <h1 className={styles.title}>No se pudo efectuar el pago :p</h1>
         <p>
-          Pronto verás tu donación en la{" "}
+          Volve a la&nbsp;
           <Link href="/" className={styles.link}>
             página principal
           </Link>
+          &nbsp;e intentalo nuevamente!
         </p>
       </div>
     </div>

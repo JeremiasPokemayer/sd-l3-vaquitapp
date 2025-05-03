@@ -1,0 +1,33 @@
+$large-screens: 769px;
+
+.root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content {
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 18px;
+  padding: 18px;
+  display: grid;
+
+  @media (min-width: $large-screens) {
+    border-radius: 12px;
+    background-color: #212121;
+    text-align: center;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.link {
+  color: aqua;
+  text-decoration: underline;
+}

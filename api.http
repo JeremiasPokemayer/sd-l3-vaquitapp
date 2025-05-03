@@ -1,0 +1,14 @@
+# POST https://api.mercadopago.com/v1/payments
+# Authorization: Bearer TEST-546390525007705-050114-57b330742abb73ae30c56b4041a312d5-460380628
+# Content-Type: application/json
+# {
+#    "transaction_amount": 100,
+#   "description": "Donación a Vaquitapp",
+#   "payment_method_id": "credit_card",
+#   "payer": {
+#     "email": "test_user_123456@testuser.com"
+#   }
+# }
+
+GET https://api.mercadopago.com/v1/payments/:paymentId
+Authorization: Bearer TEST-546390525007705-050114-57b330742abb73ae30c56b4041a312d5-460380628

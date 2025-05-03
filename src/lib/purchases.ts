@@ -1,3 +1,5 @@
+import { client } from "@/lib/db/postgres";
+
 type Purchase = {
   id: string;
   from: string;
@@ -6,50 +8,62 @@ type Purchase = {
   date: Date;
   status: string;
 };
+
+async function agregarDonacion(nombre, mensaje, monto, fecha, estado) {
+  const query =
+    "INSERT INTO donaciones (nombre, mensaje, monto, fecha, estado) VALUES ($1, $2, $3, $4, $5 )";
+  const values = [nombre, mensaje, monto, fecha, estado];
+
+  try {
+    await client.query(query, values);
+    console.log("Donación agregada exitosamente");
+  } catch (err) {
+    console.error("Error al agregar donación", err.stack);
+  }
+}
+
 export async function getConfirmedPayments(): Promise<Purchase[]> {
-  // Mock data
-  return [
-    {
-      id: "1",
-      from: "Pepito",
-      amount: 33000,
-      message: "Ahi te va mi aporte",
-      date: new Date(),
-      status: "confirmed",
-    },
-    {
-      id: "2",
-      from: "Juanita",
-      amount: 54000,
-      message: "Apoyo esta campaña",
-      date: new Date(),
-      status: "confirmed",
-    },
-    {
-      id: "3",
-      from: "Pepita",
-      amount: 60000,
-      message: "Ojalá que llegues",
-      date: new Date(),
-      status: "confirmed",
-    },
-  ];
+  const query = `SELECT * FROM public.donaciones 
+  WHERE estado = 'confirmado'`;
+  const res = await client.query(query);
+  const data = res.rows;
+  const purchases = data.map((row) => ({
+    id: row.id,
+    from: row.nombre,
+    amount: row.monto,
+    message: row.mensaje,
+    date: row.fecha,
+  }));
+
+  return purchases;
 }
 
 export async function createPurchase(
   newPurchInput: Pick<Purchase, "from" | "amount" | "message">
 ): Promise<string> {
+  const { from, amount, message } = newPurchInput;
+  const fecha = new Date();
   const purchase = {
     ...newPurchInput,
-    date: new Date(),
+    date: fecha,
     status: "pending",
   };
-  // guardamos esta nueva purchase en la db y devolvemos el id
-  return "1234";
+  await agregarDonacion(from, message, amount, fecha, "Pendiente");
+  return "Donacion creada";
 }
 
-export function confirmPurchase(purchaseId: string) {
-  // confirmamos la compra en la DB
-  console.log(`Purchase ${purchaseId} confirmed`);
+export async function confirmPurchase() {
+  const queryGet = `
+  SELECT * FROM public.donaciones
+  ORDER BY id ASC `;
+
+  const query = `
+    UPDATE public.donaciones
+    SET estado = 'confirmado'
+    WHERE id = $1
+  `;
+  const purchase = await client.query(queryGet);
+  const data = purchase.rows;
+  const confirm = await client.query(query, [data.length]);
   return true;
 }

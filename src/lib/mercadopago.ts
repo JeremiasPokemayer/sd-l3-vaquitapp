@@ -31,6 +31,8 @@ export async function createSingleProductPreference(
   // Todas las opciones en
   // https://www.mercadopago.com.ar/developers/es/reference/preferences/_checkout_preferences/post
 
+  console.log(options.transactionId);
+
   return pref.create({
     body: {
       items: [
@@ -45,7 +47,7 @@ export async function createSingleProductPreference(
       ],
       // URL de redirección en los distintos casos
       back_urls: {
-        success: "https://" + BASE_URL + "/donate/success",
+        success: `https://${BASE_URL}/donate/success`,
         failure: "https://" + BASE_URL + "/donate/failure",
         pending: "https://" + BASE_URL + "/donate/pending",
       },
